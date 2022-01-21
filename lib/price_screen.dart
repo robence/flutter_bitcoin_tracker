@@ -32,7 +32,8 @@ class _PriceScreenState extends State<PriceScreen> {
                   '1 BTC = ? USD',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
