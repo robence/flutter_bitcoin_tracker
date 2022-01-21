@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bitcoin_tracker/coin_api.dart';
 import 'package:flutter_bitcoin_tracker/coin_data.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -13,6 +14,18 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   var selectedCurrency = 'USD';
+  String bitcoinRate = '?';
+
+  final coinApi = CoinApi();
+
+  updateUI() async {
+    final rate = await coinApi.getExchangeRate();
+    print('rate');
+    print(rate);
+    setState(() {
+      bitcoinRate = rate?.toString() ?? '?';
+    });
+  }
 
   getDropDownWidget() {
     return Platform.isIOS
@@ -41,6 +54,12 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    updateUI();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -58,12 +77,13 @@ class _PriceScreenState extends State<PriceScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ? USD',
+                  '1 BTC = $bitcoinRate USD',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
