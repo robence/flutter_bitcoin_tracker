@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bitcoin_tracker/coin_data.dart';
 
@@ -10,6 +13,32 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   var selectedCurrency = 'USD';
+
+  getDropDownWidget() {
+    return Platform.isIOS
+        ? CupertinoPicker(
+            itemExtent: 32.0,
+            onSelectedItemChanged: (itemIndex) {
+              setState(() {
+                selectedCurrency = currenciesList[itemIndex];
+              });
+            },
+            backgroundColor: Colors.lightBlue,
+            children: currenciesList.map((e) => Text(e)).toList(),
+          )
+        : DropdownButton(
+            value: selectedCurrency,
+            style: const TextStyle(fontSize: 20.0),
+            items: currenciesList
+                .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                .toList(),
+            onChanged: (String? value) {
+              setState(() {
+                selectedCurrency = value ?? selectedCurrency;
+              });
+            },
+          );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +73,11 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ),
           Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
-            child: DropdownButton(
-              value: selectedCurrency,
-              style: const TextStyle(fontSize: 20.0),
-              items: currenciesList
-                  .map((e) => DropdownMenuItem(child: Text(e), value: e))
-                  .toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  selectedCurrency = value ?? selectedCurrency;
-                });
-              },
-            ),
-          ),
+              height: 150.0,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(bottom: 30.0),
+              color: Colors.lightBlue,
+              child: getDropDownWidget()),
         ],
       ),
     );
