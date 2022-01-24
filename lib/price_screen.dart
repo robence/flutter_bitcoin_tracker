@@ -19,6 +19,7 @@ class _PriceScreenState extends State<PriceScreen> {
   final coinApi = CoinApi();
 
   updateUI() async {
+    print('calling with selectedCurrency: $selectedCurrency');
     final double? rate = await coinApi.getExchangeRate(selectedCurrency);
     print('rate in currency');
     print("$rate in $selectedCurrency");
@@ -35,6 +36,7 @@ class _PriceScreenState extends State<PriceScreen> {
               setState(() {
                 selectedCurrency = currenciesList[itemIndex];
               });
+              updateUI();
             },
             backgroundColor: Colors.lightBlue,
             children: currenciesList.map((e) => Text(e)).toList(),
@@ -49,6 +51,7 @@ class _PriceScreenState extends State<PriceScreen> {
               setState(() {
                 selectedCurrency = value ?? selectedCurrency;
               });
+              updateUI();
             },
           );
   }
@@ -81,7 +84,7 @@ class _PriceScreenState extends State<PriceScreen> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $bitcoinRate USD',
+                  '1 BTC = $bitcoinRate $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 24.0,
