@@ -19,11 +19,11 @@ class _PriceScreenState extends State<PriceScreen> {
   final coinApi = CoinApi();
 
   updateUI() async {
-    final rate = await coinApi.getExchangeRate();
-    print('rate');
-    print(rate);
+    final double? rate = await coinApi.getExchangeRate(selectedCurrency);
+    print('rate in currency');
+    print("$rate in $selectedCurrency");
     setState(() {
-      bitcoinRate = rate?.toString() ?? '?';
+      bitcoinRate = rate?.toStringAsFixed(0) ?? '?';
     });
   }
 
